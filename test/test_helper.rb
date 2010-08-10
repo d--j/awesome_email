@@ -5,10 +5,10 @@ class Test::Unit::TestCase
   
   protected
     
-    def find_rules(html)
+    def get_css_doc(html)
       css_doc = @mailer.parse_css_doc(@css)
       html_doc = @mailer.parse_html_doc(html)
-      css_doc.rule_sets
+      css_doc
     end
     
     def render_inline(html)

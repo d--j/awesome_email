@@ -1,13 +1,7 @@
 # coding: utf-8
 $KCODE = 'u' unless RUBY_VERSION >= '1.9'
 
-require 'rubygems'
-
-gem 'actionmailer', '>= 2.0.1'
-gem 'actionpack', '>= 2.0.1'
-
-require 'action_mailer'
-require 'action_view'
+require File.join(File.dirname(__FILE__), 'test-app', 'config', 'environment')
 
 require 'awesome_email'
 
@@ -16,49 +10,8 @@ require 'test_helper'
 
 ActionMailer::Base.delivery_method = :test
 
-RAILS_ROOT = File.join('', 'some', 'dir')
-CSS_TEST_FILE = File.join(RAILS_ROOT, 'public', 'stylesheets', 'mails', 'test.css')
+CSS_TEST_FILE = Rails.root.join('public', 'stylesheets', 'test.css').to_s
 
-#################################################################
-
-# Do some mocking, use Mocha here?
-class SimpleMailer < ActionMailer::Base
-  
-  def test
-    setup_multipart_mail
-    layout 'test'
-  end
-  
-  protected
-    
-    def setup_multipart_mail
-      headers       'Content-transfer-encoding' => '8bit'
-      sent_on       Time.now
-      content_type  'text/html'
-    end
-    
-    def html_part?(method_name)
-      true
-    end
-    
-    def render_content_for_layout(method_name, template)
-      'test inner content'
-    end
-    
-    # mock rendering
-    def render_layout_template(template, method_name, layout_path = File.join('layouts', 'mailers'))
-      return template.render(:inline => "<html><body><h1>Fäncy</h1><p><%= yield %></p></body></html>")
-      html = %{
-        <!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">
-        <html>
-        <head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"></head>
-        <body><p><%= yield %></p></body>
-        </html>
-      }
-      return template.render(:inline => html)
-    end
-    
-end
 
 ###############################################################
 
@@ -78,8 +31,8 @@ class MyMailer
   # include neccessary mixins
   include ActionMailer::AdvAttrAccessor
   include ActionMailer::ConvertEntities
+  include ActionController::Layout
   include ActionMailer::InlineStyles
-  include ActionMailer::Layouts
 end
 
 MyMailer.send(:public, *MyMailer.protected_instance_methods)
@@ -130,16 +83,10 @@ class AwesomeEmailTest < Test::Unit::TestCase
     assert result =~ /<h1 style="(.*)font-size:/
   end
   
-  def test_should_find_matching_rules
-    rules = find_rules(build_html('', '<h1>bla</h1>'))
-    assert rules.size > 0
-  end
-  
   def test_should_create_css_for_h1
-    rules = find_rules(build_html('<h1>bla</h1>'))
-    css = @mailer.css_for_rule(rules.first)
-    assert_not_nil css
-    assert_equal 'font-size: 140.0% !important;', css
+    inlined = render_inline(build_html('<h1>bla</h1>'))
+    assert_not_nil inlined
+    assert_equal "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">\n<html>\n<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"></head>\n<body><h1 style=\"font-size: 140.0%;\">bla</h1></body>\n</html>\n", inlined
   end
   
   def test_should_cummulate_style_information
@@ -162,24 +109,16 @@ class AwesomeEmailTest < Test::Unit::TestCase
   # layout tests #
   ################
   
-  def test_should_extend_with_mailer_name
-    template_name = 'some_mail'
-    result = @mailer.extend_with_mailer_name(template_name)
-    assert_equal File.join('my_mailer', template_name), result
-  end
-  
   # make sure the accessors are available
   def test_should_have_awesome_email_accessor_methods
     if RUBY_VERSION >= '1.9'
       assert ActionMailer::Base.instance_methods.include?(:'css')
       assert ActionMailer::Base.instance_methods.include?(:'css=')
-      assert ActionMailer::Base.instance_methods.include?(:'layout')
-      assert ActionMailer::Base.instance_methods.include?(:'layout=')
+      assert ActionMailer::Base.methods.include?(:'layout')
     else
       assert ActionMailer::Base.instance_methods.include?('css')
       assert ActionMailer::Base.instance_methods.include?('css=')
-      assert ActionMailer::Base.instance_methods.include?('layout')
-      assert ActionMailer::Base.instance_methods.include?('layout=')
+      assert ActionMailer::Base.methods.include?('layout')
     end
   end
   

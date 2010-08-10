@@ -2,7 +2,7 @@ h2. For the impatient
 
 Install as plugin: 
 
-<pre>script/plugin install git://github.com/goganchic/awesome_email.git</pre>
+<pre>script/plugin install git://github.com/d--j/awesome_email.git</pre>
 
 Learn how to use it below.
 
@@ -24,11 +24,10 @@ h2. How to use it
 In your Mailer.delivery_xxx methods you can use
 
 <pre><code>
-    layout    "template_filename"
     css       "css_filename"
 </code></pre>
 
-or without letter template
+or without templates
 
 <pre><code>
     css "css_filename"
@@ -42,7 +41,7 @@ You can include several css files if required
     css       ["css_filename1", "css_filename2"]
 </code></pre>
 
-to define which layout should be used and which css file should be used to create inline styles
+to define which css file should be used and to create inline styles
 
 h3. CSS inlining
 
@@ -89,7 +88,7 @@ h2. Dependencies
 
 Gems:
 
-* "rails 2.0.1+":http://github.com/rails/rails
+* "rails 2.3.1+":http://github.com/rails/rails
 * "nokogiri 1.3.3+":http://github.com/tenderlove/nokogiri
 * "css_parser":http://code.dunae.ca/css_parser/
 

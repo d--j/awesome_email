@@ -61,11 +61,11 @@ class AwesomeEmailTest < Test::Unit::TestCase
   
   def test_should_build_correct_file_name_from_set_css
     @mailer.css 'test'
-    assert_equal CSS_TEST_FILE, @mailer.build_css_file_name_from_css_setting
+    assert_equal [CSS_TEST_FILE], @mailer.build_css_file_name_from_css_setting
   end
   
   def test_should_build_no_file_name_if_css_not_set
-    assert_equal '', @mailer.build_css_file_name_from_css_setting
+    assert_equal [], @mailer.build_css_file_name_from_css_setting
   end
   
   def test_should_not_change_html_if_no_styles_were_found

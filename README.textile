@@ -15,7 +15,7 @@ h2. What does it do?
 
 There are a few interesting components in <code>awesome_email</code>:
 
-* The HTML Mail's CSS is automatcally inlined. That means that your designer and/or CSS guy can design the email in a web browser without worrying about how it might look like in excotic email clients. Yes, it works in Outlook, too, and no, it "doesn't work in Outlook 2007 without tweaking":http://www.sitepoint.com/blogs/2007/01/10/microsoft-breaks-html-email-rendering-in-outlook. The reason is a "stupid decision from Microsoft about Outlook 2007", but we're working on that one.
+* The HTML Mail's CSS is automatically inlined. That means that your designer and/or CSS guy can design the email in a web browser without worrying about how it might look like in excotic email clients. Yes, it works in Outlook, too, and no, it "doesn't work in Outlook 2007 without tweaking":http://www.sitepoint.com/blogs/2007/01/10/microsoft-breaks-html-email-rendering-in-outlook.
 * ConvertEntities replaces Umlauts and other crazy symbols like &auml;, &Ouml; etc. with their HTML Entitiy counterparts e.g. <code>&amp;auml;</code> and so on.
 * HelperMethods allow you to dump the content of the CSS file right into a style tag inside the header of your HTML mail.
 

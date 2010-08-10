@@ -2,7 +2,7 @@ h2. For the impatient
 
 Install as plugin: 
 
-<pre>script/plugin install git://github.com/d--j/awesome_email.git</pre>
+<pre>script/plugin install git://github.com/goganchic/awesome_email.git</pre>
 
 Learn how to use it below.
 
@@ -26,6 +26,20 @@ In your Mailer.delivery_xxx methods you can use
 <pre><code>
     layout    "template_filename"
     css       "css_filename"
+</code></pre>
+
+or without letter template
+
+<pre><code>
+    css "css_filename"
+    html_content = "some html here"
+    body(inline(html_content))
+</code></pre>
+
+You can include several css files if required
+
+<pre><code>
+    css       ["css_filename1", "css_filename2"]
 </code></pre>
 
 to define which layout should be used and which css file should be used to create inline styles

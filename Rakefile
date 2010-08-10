@@ -11,7 +11,7 @@ EMAIL = "entwickler@imedo.de"
 SUPPORT_FILES = %w(README.textile)
 
 begin
-  gem 'technicalpickles-jeweler', '>= 1.2.1'
+  gem 'jeweler', '>= 1.2.1'
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = NAME
@@ -25,9 +25,12 @@ begin
     gem.files = SUPPORT_FILES << %w(MIT-LICENSE Rakefile) << Dir.glob(File.join('{lib,rails,test}', '**', '*'))
     gem.executables = %w()
     gem.extra_rdoc_files = %w{README.textile}
+    gem.add_dependency 'rails', '~> 2.3.1'
+    gem.add_dependency 'nokogiri', '>= 1.3.3'
+    gem.add_dependency 'css_parser'
   end
 rescue LoadError
-  puts "Jeweler, or one of its dependencies, is not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
+  puts "Jeweler, or one of its dependencies, is not available. Install it with: sudo gem install jeweler"
 end
 
 desc %Q{Run unit tests for "#{NAME}".}
